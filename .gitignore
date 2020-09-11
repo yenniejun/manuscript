@@ -1,0 +1,8 @@
+.DS_STORE
+temp.sql
+api/node_modules/
+api/yarn-error.log
+api/.env
+api/.nyc_output
+api/coverage
+api/build/
