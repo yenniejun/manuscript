@@ -2,16 +2,22 @@
 
 
 import {
-  dropTables,
+  initialize,
   createTables,
-  insertIntoTables,
+  insertAuthorsIntoTables,
+  insertManuscriptsIntoTables,
+  dropAuthorsTables,
+  dropManuscriptsTables
 } from '../src/utils/queryFunctions';
 
 before(async () => {
+  await initialize();
   await createTables();
-  await insertIntoTables();
+  await insertAuthorsIntoTables();
+  await insertManuscriptsIntoTables();
 });
 
 after(async () => {
-  await dropTables();
+  await dropManuscriptsTables();
+  await dropAuthorsTables();
 });

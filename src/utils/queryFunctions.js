@@ -17,7 +17,10 @@ export const executeQueryArray = async arr => new Promise(resolve => {
   });
 });
 
-export const initialize = () => executeQueryArray([ init])
-export const dropTables = () => executeQueryArray([ dropManuscriptsTable, dropAuthorsTable ]);
+export const initialize = () => executeQueryArray([ init ])
+export const dropManuscriptsTables = () => executeQueryArray([ dropManuscriptsTable ]);
+export const dropAuthorsTables = () => executeQueryArray([ dropAuthorsTable ]);
+// export const dropTables = () => executeQueryArray([ dropManuscriptsTable, dropAuthorsTable ]);
 export const createTables = () => executeQueryArray([ createAuthorsTable, createManuscriptsTable ]);
-export const insertIntoTables = () => executeQueryArray([ insertAuthors, insertManuscripts ]);
+export const insertAuthorsIntoTables = () => executeQueryArray([ insertAuthors ]);
+export const insertManuscriptsIntoTables = () => executeQueryArray([ insertManuscripts ]);

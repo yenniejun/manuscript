@@ -1,5 +1,4 @@
 export const init = `
-ALTER USER me WITH SUPERUSER;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 DROP TABLE IF EXISTS manuscripts;
 DROP TABLE IF EXISTS authors;

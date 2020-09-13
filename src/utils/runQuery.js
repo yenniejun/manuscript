@@ -1,7 +1,9 @@
-import { createTables, insertIntoTables, initialize } from './queryFunctions';
+import { initialize, createTables, insertAuthorsIntoTables, 
+	insertManuscriptsIntoTables } from './queryFunctions';
 
 (async () => {
   await initialize();
   await createTables();
-  await insertIntoTables();
+  await insertAuthorsIntoTables();
+  await insertManuscriptsIntoTables();
 })();

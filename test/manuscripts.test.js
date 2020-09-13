@@ -1,4 +1,5 @@
 import { expect, server, BASE_URL } from './setup';
+
 describe('Manuscripts', () => {
   it('get manuscripts page', done => {
     server
@@ -10,8 +11,8 @@ describe('Manuscripts', () => {
         res.body.manuscripts.forEach(m => {
           expect(m).to.have.property('title');
           expect(m).to.have.property('genre');
-          expect(m).to.have.property('wordCount');
-          expect(m).to.have.property('authorId');
+          expect(m).to.have.property('wordcount');
+          expect(m).to.have.property('authorid');
         });
         done();
       });

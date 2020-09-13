@@ -1,4 +1,5 @@
 import { expect, server, BASE_URL } from './setup';
+
 describe('Authors', () => {
   it('get authors page', done => {
     server
@@ -9,7 +10,7 @@ describe('Authors', () => {
         expect(res.body.authors).to.be.instanceOf(Array);
         res.body.authors.forEach(m => {
           expect(m).to.have.property('name');
-          expect(m).to.have.property('myManuscripts');
+          expect(m).to.have.property('mymanuscripts');
         });
         done();
       });
