@@ -1,8 +1,8 @@
 .DS_STORE
 temp.sql
-api/node_modules/
-api/yarn-error.log
-api/.env
-api/.nyc_output
-api/coverage
-api/build/
+node_modules/
+yarn-error.log
+.env
+.nyc_output
+coverage
+build/
