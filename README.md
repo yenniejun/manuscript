@@ -21,6 +21,7 @@ yarn startdev
 ## Tools
 * PostgreSql
 * Express (backend API) (Following this [tutorial](https://www.smashingmagazine.com/2020/04/express-api-backend-project-postgresql/))
+* [Elephant Sql](https://api.elephantsql.com/console/dfc2ee2b-49ba-4258-826c-a66c13c8df58/details) for the database
 * [Travis CI](https://travis-ci.com/github/yenniejun/manuscript/settings)
 * [Coveralls](https://coveralls.io/github/yenniejun/manuscript)
 * [Code Climate](https://codeclimate.com/github/yenniejun/manuscript)
