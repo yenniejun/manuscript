@@ -12,6 +12,9 @@ This project aims to create a tool that will connect writers of all levels, expe
 
 ## How to run this app
 First, clone the repo.
+```
+git clone https://github.com/yenniejun/manuscript.git
+```
 
 Then,
 ```
