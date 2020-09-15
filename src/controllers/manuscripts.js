@@ -10,3 +10,17 @@ export const manuscriptPage = async (req, res) => {
     res.status(200).json({ manuscripts: err.stack });
   }
 };
+
+export const addManuscript = async (req, res) => {
+  const { authorid, title, genre, form, blurb, wordcount } = req.body;
+  const columns = 'authorid, title, genre, form, blurb, wordcount';
+  const values = `'${authorid}', '${title}', '${genre}',\
+   '${form}', '${blurb}', '${wordcount}'`;
+  try {
+    const data = await manuscriptModel.insertWithReturn('manuscript', columns, values);
+    res.status(200).json({ manuscripts: data.rows });
+  } catch (err) {
+    res.status(200).json({ manuscripts: err.stack });
+  }
+};
+

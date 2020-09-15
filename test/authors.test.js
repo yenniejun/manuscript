@@ -16,10 +16,9 @@ describe('Authors', () => {
       });
   });
 
-  it('posts (creates) new authors', done => {
+  it('posts (creates) new author', done => {
     const data = { name: 'some name', email: 'new@name.come',
                  writingLevel: 'amateur', 'manuscriptCap': 3 };
-    console.log(data.writingLevel);
     server
       .post(`${BASE_URL}/authors`)
       .send(data)
@@ -35,6 +34,6 @@ describe('Authors', () => {
           expect(m).to.have.property('manuscriptcap', data.manuscriptCap);
         });
         done();
-    });
-});
+      });
+  });
 });

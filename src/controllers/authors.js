@@ -17,7 +17,7 @@ export const addAuthor = async (req, res) => {
   const values = `'${name}', '${email}', '${writingLevel}',\
    '${manuscriptCap}'`;
   try {
-    const data = await authorModel.insertWithReturn(columns, values);
+    const data = await authorModel.insertWithReturn('author', columns, values);
     res.status(200).json({ authors: data.rows });
   } catch (err) {
     res.status(200).json({ authors: err.stack });

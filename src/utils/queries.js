@@ -23,8 +23,8 @@ CREATE TABLE manuscripts (
   manuscriptId UUID PRIMARY KEY
   	DEFAULT uuid_generate_v1(),
   authorId UUID REFERENCES authors(authorId)
-	ON DELETE SET NULL
-	ON UPDATE NO ACTION,
+  	ON DELETE SET NULL
+  	ON UPDATE NO ACTION,
   title VARCHAR(200) NOT NULL,
   genre VARCHAR(100) NOT NULL,
   form VARCHAR(100) NOT NULL,
@@ -41,6 +41,12 @@ export const insertAuthors = `
 INSERT INTO authors (name, email, writingLevel, manuscriptCap)
 VALUES ('J. K. Rowling', 'jk@rowling.com', 'Professional', 10),
 	   ('Jane Doe', 'jane@doe.com', 'Amateur', 3);
+`
+
+export const insertManuscripts2 = `
+SET CONSTRAINTS ALL DEFERRED;
+INSERT INTO manuscripts(authorid, title, genre, form, blurb, wordCount)
+VALUES ('cb55dd3c-286d-4409-b2c7-0ca7926e82fc', 'Some title', 'Fantasy',   'Novel', 'synopsis', 123)
 `
 
 export const insertManuscripts = `

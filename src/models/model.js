@@ -13,11 +13,12 @@ class Model {
     return this.pool.query(query);
   }
 
-  async insertWithReturn(columns, values) {
+  async insertWithReturn(tablename, columns, values) {
+    const id = tablename + 'id'; // ex: authorid
     const query = `
           INSERT INTO ${this.table}(${columns})
           VALUES (${values})
-          RETURNING authorid, ${columns}
+          RETURNING ${id}, ${columns}
       `;
     return this.pool.query(query);
   }
