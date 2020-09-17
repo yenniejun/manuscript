@@ -24,7 +24,35 @@ export const addManuscript = async (req, res) => {
   }
 };
 
-export const patchManuscript = async (req, res) => {
-  const { authorid, title, genre, form, blurb, wordcount, manuscriptMatches } = req.body;
+export const updateManuscript = async (req, res) => {
+  const { manuscriptid } = req.body;
   // TODO 
+
+  var columns = [];
+  var values = [];
+
+  ['title', 'genre', 'form', 'blurb', 'wordcount'].forEach((attribute, index) => {
+    if (attribute in req.body) {
+      columns.push(attribute);
+      values.push(req.body[attribute]);
+    }
+  })
+
+  const update_query = columns.map((col, i) => col + "='" + values[i] + "'").join(", ")
+  columns = columns.join(", ");
+
+  try {
+    const data = await manuscriptModel.updateWithReturn('manuscript', manuscriptid, update_query, columns);
+    res.status(200).json({ manuscripts: data.rows });
+  } catch (err) {
+    res.status(200).json({ manuscripts: err.stack });
+  }
 }
+
+export const updateManuscriptMatches = async (req, res) => {
+  // TODO
+  const { authorid, manuscriptid, manuscriptMatches } = req.body;
+
+}
+
+

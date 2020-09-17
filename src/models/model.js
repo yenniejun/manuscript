@@ -31,7 +31,6 @@ class Model {
           WHERE ${tablename_id} = '${id}'
           RETURNING ${tablename_id}, ${columns}
       `;
-
     return this.pool.query(query);
   }
 }
