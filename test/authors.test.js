@@ -36,4 +36,33 @@ describe('Authors', () => {
         done();
       });
   });
+
+  it('updates author preferences', async () => {
+    const authordata = { name: 'some name', email: 'new@name.come',
+                 writingLevel: 'amateur', 'manuscriptCap': 3 };  
+    const author = await server.post(`${BASE_URL}/authors`).send(authordata)
+    const authorid = author.body.authors[0].authorid
+
+    const data = { name: 'new name', email: 'better@email.come',
+                 writingLevel: 'professional', 'manuscriptCap': 10,
+                 authorid: authorid };
+
+    server
+      .patch(`${BASE_URL}/authors`)
+      .send(data)
+      .expect(200)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.authors).to.be.instanceOf(Array);
+        res.body.authors.forEach(m => {
+          expect(m).to.have.property('authorid');
+          expect(m).to.have.property('name', data.name);
+          expect(m).to.have.property('email', data.email);
+          expect(m).to.have.property('writinglevel', data.writingLevel);
+          expect(m).to.have.property('manuscriptcap', data.manuscriptCap);
+        });
+      });
+  });
+
+
 });

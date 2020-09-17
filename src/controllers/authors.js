@@ -24,7 +24,31 @@ export const addAuthor = async (req, res) => {
   }
 };
 
+export const updateAuthorPreferences = async (req, res) => {
+  var columns = [];
+  var values = [];
 
-// TO DO 
-// 1. Patch author preferences (name, email, etc)
-// 2. Patch author manuscripts: myManuscripts, myDrafts, masterManuscriptMatches (metadata)
+  ['name', 'email', 'writingLevel', 'manuscriptCap'].forEach((attribute, index) => {
+  	if (attribute in req.body) {
+	  	columns.push(attribute);
+	  	values.push(req.body[attribute]);
+	  }
+  })
+
+  const update_query = columns.map((col, i) => col + "='" + values[i] + "'").join(", ")
+  const authorid = req.body.authorid;
+  columns = columns.join(", ");
+
+  try {
+    const data = await authorModel.updateWithReturn('author', authorid, update_query, columns);
+    res.status(200).json({ authors: data.rows });
+  } catch (err) {
+    res.status(200).json({ authors: err.stack });
+  }
+}
+
+export const updateAuthorManuscripts = async (req, res) => {
+  const { myManuscripts, myDrafts, masterManuscriptMatches } = req.body;
+  // TO DO 
+}
+

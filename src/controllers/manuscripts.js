@@ -24,3 +24,7 @@ export const addManuscript = async (req, res) => {
   }
 };
 
+export const patchManuscript = async (req, res) => {
+  const { authorid, title, genre, form, blurb, wordcount, manuscriptMatches } = req.body;
+  // TODO 
+}

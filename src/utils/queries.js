@@ -43,12 +43,6 @@ VALUES ('J. K. Rowling', 'jk@rowling.com', 'Professional', 10),
 	   ('Jane Doe', 'jane@doe.com', 'Amateur', 3);
 `
 
-export const insertManuscripts2 = `
-SET CONSTRAINTS ALL DEFERRED;
-INSERT INTO manuscripts(authorid, title, genre, form, blurb, wordCount)
-VALUES ('cb55dd3c-286d-4409-b2c7-0ca7926e82fc', 'Some title', 'Fantasy',   'Novel', 'synopsis', 123)
-`
-
 export const insertManuscripts = `
 INSERT INTO manuscripts (authorId, title, genre, form, blurb, wordCount)
 SELECT authorId, 'Fifty Shades of Gray', 'Romance', 'Novel', 'Some dude and some girl', 50000
