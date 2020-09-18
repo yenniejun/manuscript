@@ -4,7 +4,17 @@ const authorModel = new Model('authors');
 
 export const getAuthors = async (req, res) => {
   try {
-    const data = await authorModel.select('name, myManuscripts');
+    const data = await authorModel.select('authorid, name, email, writingLevel, manuscriptCap, myManuscripts');
+    res.status(200).json({ authors: data.rows });
+  } catch (err) {
+    res.status(200).json({ authors: err.stack });
+  }
+};
+
+export const getAuthor = async (req, res) => {
+  try {
+    const query = ` WHERE authorid = '${req.params.id}'`;
+    const data = await authorModel.select(['authorid, name, email, writingLevel, manuscriptCap, myManuscripts'], query);
     res.status(200).json({ authors: data.rows });
   } catch (err) {
     res.status(200).json({ authors: err.stack });
