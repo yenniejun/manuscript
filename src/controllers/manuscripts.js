@@ -23,7 +23,6 @@ export const getManuscript = async (req, res) => {
 
 // i know technically this shouldn't belong here but oh well
 export const getAuthorManuscripts = async (req, res) => {
-  console.log("???", req.params.id)
   try {
     const query = ` WHERE authorid = '${req.params.id}'`;
     const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, wordCount'], query);
