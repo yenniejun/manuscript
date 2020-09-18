@@ -4,7 +4,7 @@ const manuscriptModel = new Model('manuscripts');
 
 export const getManuscripts = async (req, res) => {
   try {
-    const data = await manuscriptModel.select('manuscriptId, authorId, title, genre, wordCount');
+    const data = await manuscriptModel.select('manuscriptId, authorId, title, genre, form, blurb, wordCount');
     res.status(200).json({ manuscripts: data.rows });
   } catch (err) {
     res.status(200).json({ manuscripts: err.stack });
@@ -14,7 +14,7 @@ export const getManuscripts = async (req, res) => {
 export const getManuscript = async (req, res) => {
   try {
     const query = ` WHERE manuscriptid = '${req.params.id}'`;
-    const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, wordCount'], query);
+    const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, form, blurb, wordCount'], query);
     res.status(200).json({ manuscripts: data.rows });
   } catch (err) {
     res.status(200).json({ manuscripts: err.stack });
@@ -25,7 +25,7 @@ export const getManuscript = async (req, res) => {
 export const getAuthorManuscripts = async (req, res) => {
   try {
     const query = ` WHERE authorid = '${req.params.id}'`;
-    const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, wordCount'], query);
+    const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, form, blurb, wordCount'], query);
     res.status(200).json({ manuscripts: data.rows });
   } catch (err) {
     res.status(200).json({ manuscripts: err.stack });
