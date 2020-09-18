@@ -53,6 +53,29 @@ describe('Manuscripts', () => {
       });
   });
 
+  it('get manuscripts by author id', async () => {
+    // Create an author
+    const authordata = { name: 'some name', email: 'new@name.come',
+                 writingLevel: 'amateur', 'manuscriptCap': 3 };  
+    const author = await server.post(`${BASE_URL}/authors`).send(authordata)
+    const authorid = author.body.authors[0].authorid
+
+    server
+      .get(`${BASE_URL}/authors/${authorid}/manuscripts`)
+      .expect(200)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.manuscripts).to.be.instanceOf(Array);
+        res.body.manuscripts.forEach(m => {
+          expect(m).to.have.property('manuscriptid', manuscriptid)
+          expect(m).to.have.property('title');
+          expect(m).to.have.property('genre');
+          expect(m).to.have.property('wordcount');
+          expect(m).to.have.property('authorid');
+        });
+      });
+  });
+
   it('posts (creates) new manuscript', async () => {
     const authordata = { name: 'some name', email: 'new@name.come',
                  writingLevel: 'amateur', 'manuscriptCap': 3 };  

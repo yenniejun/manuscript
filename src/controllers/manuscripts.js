@@ -21,6 +21,18 @@ export const getManuscript = async (req, res) => {
   }
 };
 
+// i know technically this shouldn't belong here but oh well
+export const getAuthorManuscripts = async (req, res) => {
+  console.log("???", req.params.id)
+  try {
+    const query = ` WHERE authorid = '${req.params.id}'`;
+    const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, wordCount'], query);
+    res.status(200).json({ manuscripts: data.rows });
+  } catch (err) {
+    res.status(200).json({ manuscripts: err.stack });
+  }
+};
+
 export const addManuscript = async (req, res) => {
   const { authorid, title, genre, form, blurb, wordcount } = req.body;
   const columns = 'authorid, title, genre, form, blurb, wordcount';
