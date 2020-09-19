@@ -33,6 +33,15 @@ class Model {
       `;
     return this.pool.query(query);
   }
+
+  async deleteFromTable(tablename, id) {
+    const tablename_id = tablename + 'id'; // ex: authorid
+    const query = `
+          DELETE FROM ${this.table}
+          WHERE ${tablename_id} = '${id}'
+      `;
+    return this.pool.query(query);
+  }
 }
 
 export default Model;

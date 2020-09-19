@@ -7,7 +7,7 @@ export const getManuscripts = async (req, res) => {
     const data = await manuscriptModel.select('manuscriptId, authorId, title, genre, form, blurb, wordCount');
     res.status(200).json({ manuscripts: data.rows });
   } catch (err) {
-    res.status(200).json({ manuscripts: err.stack });
+    res.status(400).json({ manuscripts: err.stack });
   }
 };
 
@@ -17,7 +17,7 @@ export const getManuscript = async (req, res) => {
     const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, form, blurb, wordCount'], query);
     res.status(200).json({ manuscripts: data.rows });
   } catch (err) {
-    res.status(200).json({ manuscripts: err.stack });
+    res.status(400).json({ err });
   }
 };
 
@@ -28,7 +28,7 @@ export const getAuthorManuscripts = async (req, res) => {
     const data = await manuscriptModel.select(['manuscriptId, authorId, title, genre, form, blurb, wordCount'], query);
     res.status(200).json({ manuscripts: data.rows });
   } catch (err) {
-    res.status(200).json({ manuscripts: err.stack });
+    res.status(400).json({ err });
   }
 };
 
@@ -37,11 +37,12 @@ export const addManuscript = async (req, res) => {
   const columns = 'authorid, title, genre, form, blurb, wordcount';
   const values = `'${authorid}', '${title}', '${genre}',\
    '${form}', '${blurb}', '${wordcount}'`;
+
   try {
     const data = await manuscriptModel.insertWithReturn('manuscript', columns, values);
     res.status(200).json({ manuscripts: data.rows });
   } catch (err) {
-    res.status(200).json({ manuscripts: err.stack });
+    res.status(400).json({ err });
   }
 };
 
@@ -64,9 +65,9 @@ export const updateManuscript = async (req, res) => {
 
   try {
     const data = await manuscriptModel.updateWithReturn('manuscript', manuscriptid, update_query, columns);
-    res.status(200).json({ manuscripts: data.rows });
+    res.status(201).json({ manuscripts: data.rows });
   } catch (err) {
-    res.status(200).json({ manuscripts: err.stack });
+    res.status(400).json({ err });
   }
 }
 

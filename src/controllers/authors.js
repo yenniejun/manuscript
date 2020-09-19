@@ -1,8 +1,56 @@
 import Model from '../models/model';
 import Helper from './Helper';
 
-
 const authorModel = new Model('authors');
+
+function missingValuesMessage(email, password) {
+  if (!email) {
+    return ({'message': 'Missing email for authentication'});
+  }
+
+  if (!password) {
+    return ({'message': 'Missing password for authentication'});
+  }
+
+  if (!Helper.isValidEmail(email)) {
+    return ({ 'message': 'Please enter a valid email address' });
+  }
+
+  else {
+    return 'No Error';
+  }
+}
+
+export const loginLocal = async (req, res) => {
+  const { email, password } = req.body;
+
+  const missingValuesCheck = missingValuesMessage(email, password);
+  if (missingValuesCheck !== 'No Error') {
+    return res.status(400).send(missingValuesCheck)
+  }
+
+  try {
+    const query = ` WHERE email = '${email}'`;
+    const data = await authorModel.select('*', query);
+    if (!data.rows[0]) {
+      return res.status(400).send({'message': 'The credentials you provided is incorrect'});
+    }
+    // const hashPassword = Helper.hashPassword(data.rows[0].password);
+    const hashPassword = data.rows[0].password;
+
+    if(!Helper.comparePassword(hashPassword, password)) {
+      return res.status(400).send({ 'message': 'The credentials you provided is incorrect' });
+    }
+    const token = Helper.generateToken(data.rows[0].email);
+
+    // Don't return the password
+    delete data.rows[0].password
+
+    res.status(200).json({ authors: data.rows, token: token });
+  } catch (err) {
+    res.status(400).json({ err });
+  }
+}
 
 export const getAuthors = async (req, res) => {
   try {
@@ -25,24 +73,15 @@ export const getAuthor = async (req, res) => {
   }
 };
 
-export const addAuthor = async (req, res) => {
+export const createAuthor = async (req, res) => {
   const { email, password } = req.body;
-
-  if (!email) {
-    return res.status(400).send({'message': 'Missing email for authentication'});
+  const missingValuesCheck = missingValuesMessage(email, password)
+  if (missingValuesCheck !== 'No Error') {
+    return res.status(400).send(missingValuesCheck)
   }
-
-  if (!password) {
-    return res.status(400).send({'message': 'Missing password for authentication'});
-  }
-
-  if (!Helper.isValidEmail(req.body.email)) {
-    return res.status(400).send({ 'message': 'Please enter a valid email address' });
-  }
-
   const hashPassword = Helper.hashPassword(password);
-
   const columns = 'email, password, created_date, modified_date';
+
   const values = `'${email}', '${hashPassword}', 'now()', 'now()'`;
 
   try {
@@ -61,7 +100,12 @@ export const updateAuthorPreferences = async (req, res) => {
   var columns = [];
   var values = [];
 
-  ['name', 'email', 'writingLevel', 'manuscriptCap'].forEach((attribute, index) => {
+  if ('email' in req.body) {
+    // CANNOT PATCH EMAIL
+    return res.status(400).send({ 'message': 'Cannot change email.' })
+  }
+
+  ['name', 'writingLevel', 'manuscriptCap'].forEach((attribute, index) => {
   	if (attribute in req.body) {
 	  	columns.push(attribute);
 	  	values.push(req.body[attribute]);
@@ -86,5 +130,19 @@ export const updateAuthorPreferences = async (req, res) => {
 export const updateAuthorManuscripts = async (req, res) => {
   const { myManuscripts, myDrafts, masterManuscriptMatches } = req.body;
   // TO DO 
+}
+
+// I didn't test this yet...
+export const deleteAuthor = async (req, res) => {
+  const { authorid } = req.body
+  try {
+    const data = await authorModel.deleteFromTable('author', authorid);
+    if(!data.rows[0]) {
+      return res.status(404).send({'message': 'user not found'});
+    }
+    return res.status(204).send({ 'message': 'deleted' });
+  } catch(error) {
+    return res.status(400).send(error);
+  }
 }
 

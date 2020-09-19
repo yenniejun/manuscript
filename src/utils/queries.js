@@ -42,8 +42,8 @@ CREATE TABLE manuscripts (
 
 export const insertAuthors = `
 INSERT INTO authors (name, email, password, created_date, modified_date)
-VALUES ('J. K. Rowling', 'jk@rowling.com', 'password123', '2020-01-01', '2020-09-19'),
-	   ('Jane Doe', 'jane@doe.com', 'password231', '2020-09-10', '2020-09-19');
+VALUES ('J. K. Rowling', 'jk@rowling.com', 'password', '2020-01-01', '2020-09-19'),
+	   ('Jane Doe', 'jane@doe.com', 'password', '2020-09-10', '2020-09-19');
 `
 
 export const insertManuscripts = `

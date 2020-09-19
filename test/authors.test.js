@@ -1,31 +1,26 @@
 import { expect, server, BASE_URL } from './setup';
+import bcrypt from 'bcrypt';
 
 describe('Authors', () => {
-  it('gets all authors', done => {
-    server
-      .get(`${BASE_URL}/authors`)
-      .expect(200)
-      .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body.authors).to.be.instanceOf(Array);
-        res.body.authors.forEach(m => {
-          expect(m).to.have.property('authorid');
-          expect(m).to.have.property('email');
-          expect(m).to.have.property('modified_date');
-          expect(m).to.have.property('created_date');
-        });
-        done();
-      });
+
+  var token = '';
+  var authorid = '';
+  const postdata = { email: 'testuser_author@email.com', password: 'password' }; 
+
+  function hashPassword(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
+  }
+
+  before(async () => {
+    let res = await server.post(`${BASE_URL}/authors`).send(postdata);
+    authorid = res.body.authors[0].authorid;
+    token = res.body.token;
   });
 
-  it('gets author by id', async () => {
-    // Create an author
-    const postdata = { email: 'new@name.com', password: 'password' }; 
-    const author = await server.post(`${BASE_URL}/authors`).send(postdata)
-    const authorid = author.body.authors[0].authorid
-
+  it ('logs in and returns author', async () => {
     server
-      .get(`${BASE_URL}/authors/${authorid}`)
+      .post(`${BASE_URL}/authors/login`)
+      .send(postdata)
       .expect(200)
       .end((err, res) => {
         expect(res.status).to.equal(200);
@@ -39,30 +34,77 @@ describe('Authors', () => {
       });
   });
 
-  it('posts (creates) new author', done => {
-    const postdata = { email: 'new2@name.com', password: 'password' }; 
+  it('gets author by id', async () => {
     server
-      .post(`${BASE_URL}/authors`)
-      .send(postdata)
-      .expect(201)
+      .get(`${BASE_URL}/authors/${authorid}`)
+      .set('x-access-token', token)
+      .expect(200)
       .end((err, res) => {
-        expect(res.status).to.equal(201);
+        expect(res.status).to.equal(200);
         expect(res.body.authors).to.be.instanceOf(Array);
         res.body.authors.forEach(m => {
-          expect(m).to.have.property('authorid');
+          expect(m).to.have.property('authorid', authorid);
           expect(m).to.have.property('email', postdata.email);
           expect(m).to.have.property('created_date');
           expect(m).to.have.property('modified_date');
         });
-        done();
       });
   });
+
+  it('fails to get author because no token is sent', async () => {
+    server
+      .get(`${BASE_URL}/authors/${authorid}`)
+      .expect(400)
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        expect(res.body.message).to.equal("Token is not provided");
+      });
+  });
+
+  it('gets all authors', done => {
+  server
+    .get(`${BASE_URL}/authors`)
+    .set('x-access-token', token)
+    .expect(200)
+    .end((err, res) => {
+      expect(res.status).to.equal(200);
+      expect(res.body.authors).to.be.instanceOf(Array);
+      res.body.authors.forEach(m => {
+        expect(m).to.have.property('authorid');
+        expect(m).to.have.property('email');
+        expect(m).to.have.property('modified_date');
+        expect(m).to.have.property('created_date');
+      });
+      done();
+    });
+  });
+
+  // it('posts (creates) new author', done => {
+  //   server
+  //     .post(`${BASE_URL}/authors`)
+  //     .send(postdata)
+  //     .set('x-access-token', token)
+  //     .expect(201)
+  //     .end((err, res) => {
+  //       expect(res.status).to.equal(201);
+  //       expect(res.body.authors).to.be.instanceOf(Array);
+  //       res.body.authors.forEach(m => {
+  //         expect(m).to.have.property('authorid');
+  //         expect(m).to.have.property('email', postdata.email);
+  //         expect(m).to.have.property('created_date');
+  //         expect(m).to.have.property('modified_date');
+  //       });
+  //       done();
+  //     });
+  // });
+
 
   it('incorrectly posts (creates) new author, no email', done => {
     const postdata = { name: 'something', password: 'password' }; 
     server
       .post(`${BASE_URL}/authors`)
       .send(postdata)
+      .set('x-access-token', token)
       .expect(400)
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -76,6 +118,7 @@ describe('Authors', () => {
     server
       .post(`${BASE_URL}/authors`)
       .send(postdata)
+      .set('x-access-token', token)
       .expect(400)
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -89,6 +132,7 @@ describe('Authors', () => {
     server
       .post(`${BASE_URL}/authors`)
       .send(postdata)
+      .set('x-access-token', token)
       .expect(400)
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -104,6 +148,7 @@ describe('Authors', () => {
     server
       .post(`${BASE_URL}/authors`)
       .send(postdata)
+      .set('x-access-token', token)
       .expect(400)
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -122,6 +167,7 @@ describe('Authors', () => {
     server
       .patch(`${BASE_URL}/authors`)
       .send(data)
+      .set('x-access-token', token)
       .expect(200)
       .end((err, res) => {
         expect(res.status).to.equal(200);
