@@ -7,11 +7,14 @@ DROP TABLE IF EXISTS authors;
 export const createAuthorsTable = `
 CREATE TABLE authors (
   authorId UUID PRIMARY KEY
-  	DEFAULT uuid_generate_v1(),
-  name VARCHAR(200) NOT NULL,
-  email VARCHAR(300) NOT NULL,
+    DEFAULT uuid_generate_v1(),
+  email VARCHAR(300) UNIQUE NOT NULL,
+  password VARCHAR(300) NOT NULL,
+  created_date TIMESTAMP,
+  modified_date TIMESTAMP,
+  name VARCHAR(200),
   writingLevel VARCHAR(100),
-  manuscriptCap INT NOT NULL, 
+  manuscriptCap INT, 
   myManuscripts TEXT [],
   myDrafts TEXT [],
   masterManuscriptMatches TEXT []
@@ -38,9 +41,9 @@ CREATE TABLE manuscripts (
 `
 
 export const insertAuthors = `
-INSERT INTO authors (name, email, writingLevel, manuscriptCap)
-VALUES ('J. K. Rowling', 'jk@rowling.com', 'Professional', 10),
-	   ('Jane Doe', 'jane@doe.com', 'Amateur', 3);
+INSERT INTO authors (name, email, password, created_date, modified_date)
+VALUES ('J. K. Rowling', 'jk@rowling.com', 'password123', '2020-01-01', '2020-09-19'),
+	   ('Jane Doe', 'jane@doe.com', 'password231', '2020-09-10', '2020-09-19');
 `
 
 export const insertManuscripts = `

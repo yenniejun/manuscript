@@ -4,7 +4,7 @@ import { Model } from '../src/models/model';
 
 
 describe('Manuscripts', () => {
-
+  
   it('gets all manuscripts', done => {
     server
       .get(`${BASE_URL}/manuscripts`)
@@ -23,9 +23,8 @@ describe('Manuscripts', () => {
   });
 
   it('get manuscripts by id', async () => {
-    // Create an author
-    const authordata = { name: 'some name', email: 'new@name.come',
-                 writingLevel: 'amateur', 'manuscriptCap': 3 };  
+    // Create an author 
+    const authordata = { email: 'man1@name.come', password: 'password' };  
     const author = await server.post(`${BASE_URL}/authors`).send(authordata)
     const authorid = author.body.authors[0].authorid
 
@@ -55,8 +54,7 @@ describe('Manuscripts', () => {
 
   it('get manuscripts by author id', async () => {
     // Create an author
-    const authordata = { name: 'some name', email: 'new@name.come',
-                 writingLevel: 'amateur', 'manuscriptCap': 3 };  
+    const authordata = { email: 'man2@name.come', password: 'password' };  
     const author = await server.post(`${BASE_URL}/authors`).send(authordata)
     const authorid = author.body.authors[0].authorid
 
@@ -77,8 +75,7 @@ describe('Manuscripts', () => {
   });
 
   it('posts (creates) new manuscript', async () => {
-    const authordata = { name: 'some name', email: 'new@name.come',
-                 writingLevel: 'amateur', 'manuscriptCap': 3 };  
+    const authordata = { email: 'man3@name.come', password: 'password' };  
     const author = await server.post(`${BASE_URL}/authors`).send(authordata)
     const authorid = author.body.authors[0].authorid
 
@@ -106,8 +103,7 @@ describe('Manuscripts', () => {
 
   it('updates manuscript details', async () => {
     // Create an author
-    const authordata = { name: 'some name', email: 'new@name.come',
-                 writingLevel: 'amateur', 'manuscriptCap': 3 };  
+    const authordata = { email: 'man4@name.come', password: 'password' };  
     const author = await server.post(`${BASE_URL}/authors`).send(authordata)
     const authorid = author.body.authors[0].authorid
 
